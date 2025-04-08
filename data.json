@@ -1,6 +1,6 @@
 {
   "data": [
-    { "latitude": 28.6139, "longitude": 77.2090, "infected": 132 },
+    { "latitude": 28.6139, "longitude": 77.2090, "infected": 2 },
     { "latitude": 19.0760, "longitude": 72.8777, "infected": 205 },
     { "latitude": 12.9716, "longitude": 77.5946, "infected": 190 },
     { "latitude": 22.5726, "longitude": 88.3639, "infected": 275 },
