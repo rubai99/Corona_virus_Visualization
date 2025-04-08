@@ -12,6 +12,9 @@ function updateMap() {
                 if (cases>=255){
                     color = "rgb(255, 0, 0)";
                 }
+                    else if (cases<=20){
+                    color = "rgb(33 178 12);
+                }
 
                 else{
                     color = `rgb(${cases}, 0, 0)`;
