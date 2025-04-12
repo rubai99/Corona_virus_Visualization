@@ -1,42 +1,38 @@
 const overlay = document.getElementById('styleOverlay');
-const toggleButton = document.getElementById('toggleStyle');
-const icon = document.getElementById('themeIcon');
+    const toggleButton = document.getElementById('toggleStyle');
+    const icon = document.getElementById('themeIcon');
 
-let currentStyle = 'mapbox://styles/mapbox/streets-v11';
-let markers = [];
+    toggleButton.addEventListener('click', () => {
+      icon.classList.add('spin');
+      overlay.classList.add('fade-in');
 
-// Attach style.load listener ONCE
-map.on('style.load', updateMap);
+      setTimeout(() => {
+        currentStyle = currentStyle === 'mapbox://styles/mapbox/streets-v11'
+          ? 'mapbox://styles/mapbox/dark-v10'
+          : 'mapbox://styles/mapbox/streets-v11';
 
-// Theme toggle button handler
-toggleButton.addEventListener('click', () => {
-  icon.classList.add('spin');
-  overlay.classList.add('fade-in');
+        map.setStyle(currentStyle);
 
-  setTimeout(() => {
-    currentStyle = currentStyle === 'mapbox://styles/mapbox/streets-v11'
-      ? 'mapbox://styles/mapbox/dark-v10'
-      : 'mapbox://styles/mapbox/streets-v11';
+        icon.textContent = currentStyle.includes('dark') ? '☀️' : '🌙';
 
-    map.setStyle(currentStyle);
+        map.on('style.load', updateMap);
 
-    icon.textContent = currentStyle.includes('dark') ? '☀️' : '🌙';
+        setTimeout(() => {
+          overlay.classList.remove('fade-in');
+        }, 800);
+      }, 400);
 
-    setTimeout(() => {
-      overlay.classList.remove('fade-in');
-    }, 800);
-  }, 400);
+      setTimeout(() => {
+        icon.classList.remove('spin');
+      }, 600);
+    });
 
-  setTimeout(() => {
-    icon.classList.remove('spin');
-  }, 600);
-});
-
-// Main update function
-function updateMap() {
+    function updateMap() {
   fetch("https://disease.sh/v3/covid-19/countries")
     .then(response => {
-      if (!response.ok) throw new Error("API response not OK");
+      if (!response.ok) {
+        throw new Error("API response not OK");
+      }
       return response.json();
     })
     .then(renderCountries)
@@ -49,12 +45,7 @@ function updateMap() {
     });
 }
 
-// Renders markers and popups
 function renderCountries(countries) {
-  // Clear previous markers
-  markers.forEach(marker => marker.remove());
-  markers = [];
-
   countries.forEach(country => {
     const { lat, long } = country.countryInfo;
     const { cases, deaths, recovered } = country;
@@ -66,20 +57,20 @@ function renderCountries(countries) {
     } else if (deaths <= 100) {
       color = "rgb(33, 178, 12)";
     } else {
-      color = `rgb(${deaths}, 0, 0)`;
+      color = rgb(${deaths}, 0, 0);
     }
 
-    const marker = new mapboxgl.Marker({ color, draggable: false })
-      .setLngLat([long, lat])
+    const marker = new mapboxgl.Marker({
+      color: color,
+      draggable: false,
+    }).setLngLat([long, lat])
       .addTo(map);
-
-    markers.push(marker);
 
     const popup = new mapboxgl.Popup({
       offset: 25,
       closeButton: false,
       closeOnClick: false,
-    }).setHTML(`
+    }).setHTML(
       <div style="
           background: rgba(255, 255, 255, 0.95);
           border-radius: 10px;
@@ -94,14 +85,13 @@ function renderCountries(countries) {
         <span>💀 Deaths: <strong>${deaths.toLocaleString()}</strong></span><br/>
         <span>💚 Recovered: <strong>${recovered.toLocaleString()}</strong></span>
       </div>
-    `);
+    );
 
     marker.getElement().addEventListener('mouseenter', () => popup.addTo(map).setLngLat([long, lat]));
     marker.getElement().addEventListener('mouseleave', () => popup.remove());
   });
 }
 
-// Start auto-refresh
-let interval = 10000;
-setInterval(updateMap, interval);
-updateMap(); // Initial fetch
+    let interval = 10000;
+    setInterval(updateMap, interval);
+    updateMap(); // initial call
