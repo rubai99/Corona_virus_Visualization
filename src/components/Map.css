@@ -1,0 +1,63 @@
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.mapboxgl-popup {
+  max-width: 300px !important;
+}
+
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mapboxgl-popup-tip {
+  display: none !important;
+}
+
+.map-marker {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.map-marker:hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  z-index: 1;
+}
+
+.map-popup {
+  position: absolute;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  font-size: 14px;
+  line-height: 1.4;
+  z-index: 2;
+}
+
+.map-popup strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+} 
